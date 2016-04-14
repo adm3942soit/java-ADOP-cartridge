@@ -159,12 +159,12 @@ def pipelineView = buildPipelineView("Process_EXPERIMENT")
 pipelineView.with{
     title('Process_EXPERIMENT Pipeline')
     displayedBuilds(5)
-    selectedJob(baseName)
+    selectedJob($baseName)
     showPipelineParameters()
     showPipelineDefinitionHeader()
     refreshFrequency(5)
 }
-//queue("Process_Application")
+queue("Process_EXPERIMENT")
 
 listView('ListViewEXPERIMENT') {
     jobs {
@@ -179,4 +179,4 @@ listView('ListViewEXPERIMENT') {
         buildButton()
     }
 }
-queue("ListView")
+queue("ListViewEXPERIMENT")
