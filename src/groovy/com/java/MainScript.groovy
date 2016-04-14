@@ -45,6 +45,7 @@ if(linesNmbr!=0) {
             scm {
                 git(lines[i])
             }
+            label("java8")
             triggers {
 
                 if (i == 0) {
@@ -52,9 +53,7 @@ if(linesNmbr!=0) {
                 }
 
                 cron('@hourly')
-            }
-            label("java8")
-            triggers {
+
                 gerrit {
                     events {
                         refUpdated()
@@ -116,43 +115,12 @@ if(linesNmbr!=0) {
 
                 }
             }
-
- //           job("$jobName" + "sonarJob") {
-                //              description 'Quality check'
-                //deliveryPipelineConfiguration("Code Quality", "sonar")
-                //scm {
-                //  scm {
-                //      git(lines[i])
-                //  }
-
-                //}
-                //steps {
-                //  maven{
-                //      mavenInstallation
-                //              ("ADOP Maven")
-                //      goals("org.codehaus.mojo:sonar-maven-plugin:2.6:sonar -Dsonar.host.url=192.168.99.101:8080")
-                //  }
-
-                //}
-                //publishers {
-
-                //  archiveArtifacts("**/*")
-                //  downstreamParameterized {
-                //      trigger("$newJobName") {
-                //          condition("UNSTABLE_OR_BETTER")
-                //      }
-//
-                //                  }
-                //}
             }
 
         }
         queue(jobName)
-           // def sonar=" $jobName" + "sonarJob"
-           // queue(sonar)
         i++
     }
-//}
 }
 
 /* Views*/
