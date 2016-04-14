@@ -115,10 +115,10 @@ if(linesNmbr!=0) {
 |#fi
 |git config credential.helper store
 |git config --global push.default simple
-|git remote add --mirror=push github ${gerritUrl}
+|git remote add --mirror=push origin ${gerritUrl}
 |git remote -v
-|git push ${gerritUrl} HEAD:refs/for/github
-|git clone ${gerritUrl} HEAD:refs/for/github
+|git push ${gerritUrl} HEAD:refs/for/master
+|git clone ${gerritUrl} HEAD:refs/for/master
 |git branch -r
 |set -x'''.stripMargin())
             }
