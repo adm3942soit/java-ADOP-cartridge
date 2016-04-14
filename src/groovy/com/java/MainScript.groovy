@@ -35,71 +35,65 @@ if(linesNmbr!=0) {
     def i = 0
     while (i < lines.size()) {
         def jobName = "$baseName" + "$i"
-        job("$jobName") {
+        def s = lines[i]
+        def result = s.tokenize("/")
+        def nameProject=""
+        if (result.size > 0) {
+            def s1 = result[result.size - 1]
+            println(s1)
+            def result1 = s1.tokenize(".")
+            if (result1.size > 0) {
+                nameProject = result1[0]
+                println(nameProject)
+            }
+
+        }
+        //copyRepoFromGitToGerrit()
+        def nameGerritJob="GerritRepo_"+nameProject
+        def gitUrl=lines[i]
+        def gerritUrl="ssh://jenkins@gerrit:29418/"+nameProject+".git"
+
+        job("$nameGerritJob") {
             wrappers {
                 preBuildCleanup()
                 injectPasswords()
                 maskPasswords()
                 sshAgent("adop-jenkins-master")
             }
-            def s = lines[i]
-            def result = s.tokenize("/")
-            def nameProject=""
-            if (result.size > 0) {
-                def s1 = result[result.size - 1]
-                println(s1)
-                def result1 = s1.tokenize(".")
-                if (result1.size > 0) {
-                    nameProject = result1[0]
-                    println(nameProject)
-                }
-
-            }
-            //copyRepoFromGitToGerrit()
-            def nameGerritJob="GerritRepo_"+nameProject
-            def gitUrl=lines[i]
-            def gerritUrl="ssh://jenkins@gerrit:29418/"+nameProject+".git"
-
-            job("$nameGerritJob") {
-                wrappers {
-                    preBuildCleanup()
-                    injectPasswords()
-                    maskPasswords()
-                    sshAgent("adop-jenkins-master")
-                }
-                scm{
-                    git {
-                        remote {
-                            url(gitUrl)
-                            credentials("adop-jenkins-master")
-                        }
-                        branch("*/master")
+            scm{
+                git {
+                    remote {
+                        url(gitUrl)
+                        credentials("adop-jenkins-master")
                     }
+                    branch("*/master")
                 }
-                triggers{
-                    gerrit{
-                        events{
-                            refUpdated()
-                        }
-                        configure { gerritxml ->
-                            gerritxml / 'gerritProjects' {
-                                'com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject' {
-                                    compareType("PLAIN")
-                                    pattern(nameProject)
-                                    'branches' {
-                                        'com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch' {
-                                            compareType("PLAIN")
-                                            pattern("master")
-                                        }
+            }
+            triggers{
+                gerrit{
+                    events{
+                        refUpdated()
+                    }
+                    configure { gerritxml ->
+                        gerritxml / 'gerritProjects' {
+                            'com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject' {
+                                compareType("PLAIN")
+                                pattern(nameProject)
+                                'branches' {
+                                    'com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch' {
+                                        compareType("PLAIN")
+                                        pattern("master")
                                     }
                                 }
                             }
-                            gerritxml / serverName("ADOP Gerrit")
                         }
+                        gerritxml / serverName("ADOP Gerrit")
                     }
                 }
-                steps{
-                    shell('''set +x
+            }
+            println(gerritUrl)
+            steps{
+                shell('''set +x
 |cd $WORKSPACE
 |ls
 |url="ssh://jenkins@gerrit:29418/"+"$nameProject"+".git"
@@ -113,11 +107,29 @@ if(linesNmbr!=0) {
 |git clone ${url} HEAD:refs/for/master
 |git branch -r
 |set -x'''.stripMargin())
-                }
+            }
+            publishers {
 
+                archiveArtifacts("**/*")
+                downstreamParameterized {
+                    trigger("$jobName"){
+                        condition("UNSTABLE_OR_BETTER")
+                    }
+
+                }
             }
 
-                //endcopyRepoFromGitToGerrit()
+        }
+
+        //endcopyRepoFromGitToGerrit()
+
+        job("$jobName") {
+            wrappers {
+                preBuildCleanup()
+                injectPasswords()
+                maskPasswords()
+                sshAgent("adop-jenkins-master")
+            }
             println(gerritUrl)
 
             scm {
