@@ -70,6 +70,7 @@ if(linesNmbr!=0) {
             }
             environmentVariables {
                 env('gerritUrl',gerritUrl)
+                env('gitUrl',gitUrl)
                 env('nameProject',nameProject)
                 env('COUNT', 1)
             }
@@ -103,8 +104,10 @@ if(linesNmbr!=0) {
             println(gerritUrl)
             steps{
                 shell('''set +x
+|git clone --bare  ${gitUrl}
 |cd $WORKSPACE
 |ls
+|cd $WORKSPACE/$nameProject
 |echo ${gerritUrl}
 |git remote set-url --add origin ${gerritUrl}
 |#if [ ${COUNT} -lt 2 ]; then
