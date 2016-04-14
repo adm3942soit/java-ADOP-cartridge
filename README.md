@@ -32,7 +32,7 @@ This cartridge consists of list of repositories and jenkins jobs for work with t
   Each repository must be prepared for processing them in 
               **docker->DevOps->jenkins**
 
-![docker_jenkins.png](https://innersource.accenture.com/java201/java201-adop-cartidge/raw/90dc741b7a16b99da9e411b4408e6f8dbafacb61:docker_Jenkins.png)
+![docker_jenkins.png](https://github.com/adm3942soit/java-ADOP-cartridge/blob/master/docker_Jenkins.png?raw=true)
  
  
 **Getting Started Instructions**
@@ -59,7 +59,7 @@ This cartridge consists of list of repositories and jenkins jobs for work with t
 **Result building your project in Jenkins**
 ==========================================
   
-![result_jenkins.png](https://innersource.accenture.com/java201/java201-adop-cartidge/raw/06812936df820a306a6a3cb93474c3c8a0011604:result_jenkins.png) 
+![result_jenkins.png](https://github.com/adm3942soit/java-ADOP-cartridge/blob/master/result_jenkins.png) 
   
   
   **Successful building to you!**
