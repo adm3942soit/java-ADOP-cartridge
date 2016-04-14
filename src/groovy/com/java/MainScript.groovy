@@ -154,7 +154,7 @@ if(linesNmbr!=0) {
 }
 
 /* Views*/
-def pipelineView = buildPipelineView("Process_Application")
+def pipelineView = buildPipelineView("Process_EXPERIMENT")
 pipelineView.with{
     title('Process_Application Pipeline')
     displayedBuilds(5)
@@ -163,9 +163,9 @@ pipelineView.with{
     showPipelineDefinitionHeader()
     refreshFrequency(5)
 }
-queue("Process_Application")
+//queue("Process_Application")
 
-listView('ListView') {
+listView('ListViewEXPERIMENT') {
     jobs {
         regex(/$baseName[0-9]{0,3}[a-z]{0,5}[A-Z]{0,1}[a-z]{0,2}/)
     }
