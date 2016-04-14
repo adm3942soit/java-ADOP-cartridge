@@ -107,12 +107,12 @@ if(linesNmbr!=0) {
 |ls
 |echo ${gerritUrl}
 |git remote set-url --add origin ${gerritUrl}
-|if [ ${COUNT} -lt 2 ]; then
-|ssh -p 29418 jenkins@gerrit gerrit create-project -n ${nameProject}
-|${COUNT}++
-|echo "COUNT"
-|echo $COUNT
-|fi
+|#if [ ${COUNT} -lt 2 ]; then
+|#ssh -p 29418 jenkins@gerrit gerrit create-project -n ${nameProject}
+|#${COUNT}++
+|#echo "COUNT"
+|#echo $COUNT
+|#fi
 |git config credential.helper store
 |git config --global push.default simple
 |git remote add --mirror=push github ${gerritUrl}
