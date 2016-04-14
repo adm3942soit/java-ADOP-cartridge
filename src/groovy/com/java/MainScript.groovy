@@ -100,7 +100,7 @@ if(linesNmbr!=0) {
                 shell('''set +x
 |cd $WORKSPACE
 |ls
-|url="ssh://jenkins@gerrit:29418/"+${nameProject}+".git"
+|url="ssh://jenkins@gerrit:29418/${nameProject}"+".git"
 |echo ${url}
 |git remote set-url --add origin ${url}
 |#ssh -p 29418 jenkins@gerrit gerrit create-project -n nameProject
