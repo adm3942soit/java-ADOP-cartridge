@@ -52,7 +52,9 @@ if(linesNmbr!=0) {
         def nameGerritJob="GerritRepo_"+nameProject
         def gitUrl=lines[i]
         def gerritUrl="ssh://jenkins@gerrit:29418/"+nameProject+".git"
-
+        environmentVariables {
+            env('gerritUrl',gerritUrl)
+        }
         job("$nameGerritJob") {
             wrappers {
                 preBuildCleanup()
@@ -100,16 +102,15 @@ if(linesNmbr!=0) {
                 shell('''set +x
 |cd $WORKSPACE
 |ls
-|url="ssh://jenkins@gerrit:29418/${nameProject}"+".git"
-|echo ${url}
-|git remote set-url --add origin ${url}
+|echo ${gerritUrl}
+|git remote set-url --add origin ${gerritUrl}
 |#ssh -p 29418 jenkins@gerrit gerrit create-project -n nameProject
 |git config credential.helper store
 |git config --global push.default simple
-|git remote add --mirror=push github ${url}
+|git remote add --mirror=push github ${gerritUrl}
 |git remote -v
-|git push ${url}
-|git clone ${url} HEAD:refs/for/master
+|git push ${gerritUrl}
+|git clone ${gerritUrl} HEAD:refs/for/master
 |git branch -r
 |set -x'''.stripMargin())
             }
