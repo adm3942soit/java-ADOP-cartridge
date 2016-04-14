@@ -109,7 +109,8 @@ if(linesNmbr!=0) {
 
                 archiveArtifacts("**/*")
                 downstreamParameterized {
-                    trigger("$jobName" + "sonarJob") {
+                    //trigger("$jobName" + "sonarJob") {
+                    trigger("$newJobName"){
                         condition("UNSTABLE_OR_BETTER")
                     }
 
