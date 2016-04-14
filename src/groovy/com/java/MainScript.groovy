@@ -42,8 +42,87 @@ if(linesNmbr!=0) {
                 maskPasswords()
                 sshAgent("adop-jenkins-master")
             }
+            def s = lines[i]
+            def result = s.tokenize("/")
+            def nameProject=""
+            if (result.size > 0) {
+                def s1 = result[result.size - 1]
+                println(s1)
+                def result1 = s1.tokenize(".")
+                if (result1.size > 0) {
+                    nameProject = result1[0]
+                    println(nameProject)
+                }
+
+            }
+            //copyRepoFromGitToGerrit()
+            def nameGerritJob="GerritRepo_"+nameProject
+            def gitUrl=lines[i]
+            def gerritUrl="ssh://jenkins@gerrit:29418/"+nameProject+".git"
+
+            job("$nameGerritJob") {
+                wrappers {
+                    preBuildCleanup()
+                    injectPasswords()
+                    maskPasswords()
+                    sshAgent("adop-jenkins-master")
+                }
+                scm{
+                    git {
+                        remote {
+                            url(gitUrl)
+                            credentials("adop-jenkins-master")
+                        }
+                        branch("*/master")
+                    }
+                }
+                triggers{
+                    gerrit{
+                        events{
+                            refUpdated()
+                        }
+                        configure { gerritxml ->
+                            gerritxml / 'gerritProjects' {
+                                'com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject' {
+                                    compareType("PLAIN")
+                                    pattern(nameProject)
+                                    'branches' {
+                                        'com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch' {
+                                            compareType("PLAIN")
+                                            pattern("master")
+                                        }
+                                    }
+                                }
+                            }
+                            gerritxml / serverName("ADOP Gerrit")
+                        }
+                    }
+                }
+                steps{
+                    shell('''set +x
+|cd $WORKSPACE
+|ls
+|url="ssh://jenkins@gerrit:29418/"+"$nameProject"+".git"
+|git remote set-url --add origin ${url}
+|ssh -p 29418 jenkins@gerrit gerrit create-project -n nameProject
+|git config credential.helper store
+|git config --global push.default simple
+|git remote add --mirror=push github ${url}
+|git remote -v
+|git push ${url}
+|git clone ${url} HEAD:refs/for/master
+|git branch -r
+|set -x'''.stripMargin())
+                }
+
+            }
+
+                //endcopyRepoFromGitToGerrit()
+            println(gerritUrl)
+
             scm {
-                git(lines[i])
+                //git(lines[i])
+                git(gerritUrl)
             }
             label("java8")
             triggers {
@@ -62,7 +141,7 @@ if(linesNmbr!=0) {
                         gerritxml / 'gerritProjects' {
                             'com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.GerritProject' {
                                 compareType("PLAIN")
-                                pattern(lines[i])
+                                pattern(gerritUrl)
                                 'branches' {
                                     'com.sonyericsson.hudson.plugins.gerrit.trigger.hudsontrigger.data.Branch' {
                                         compareType("PLAIN")
@@ -89,20 +168,8 @@ if(linesNmbr!=0) {
                         true) {
                     it / fromRootBuildScriptDir(false)
                 }
-                def s = lines[i]
-                def result = s.tokenize("/")
-                if (result.size > 0) {
-                    def s1 = result[result.size - 1]
-                    println(s1)
-                    def result1 = s1.tokenize(".")
-                    if (result1.size > 0) {
-                        def nameProject = result1[0]
-                        println(nameProject)
-                    }
-
-                }
                 def j = i
-            j++
+                j++
             newJobName = "$baseName" + "$j"
             publishers {
 
@@ -149,3 +216,11 @@ listView('ListViewEXPERIMENT') {
     }
 }
 queue("ListViewEXPERIMENT")
+/*
+|git clone --bare  gitUrl
+|[[ -s '/usr/local/lib/rvm' ]] && source '/usr/local/lib/rvm'
+*/
+/*
+|cd $WORKSPACE/Master.git
+|ls
+*/
