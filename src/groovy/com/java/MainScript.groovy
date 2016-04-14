@@ -102,7 +102,7 @@ if(linesNmbr!=0) {
 |ls
 |url="ssh://jenkins@gerrit:29418/"+"$nameProject"+".git"
 |git remote set-url --add origin ${url}
-|ssh -p 29418 jenkins@gerrit gerrit create-project -n nameProject
+|#ssh -p 29418 jenkins@gerrit gerrit create-project -n nameProject
 |git config credential.helper store
 |git config --global push.default simple
 |git remote add --mirror=push github ${url}
