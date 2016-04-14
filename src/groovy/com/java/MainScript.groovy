@@ -106,7 +106,7 @@ if(linesNmbr!=0) {
 |ls
 |echo ${gerritUrl}
 |git remote set-url --add origin ${gerritUrl}
-|#ssh -p 29418 jenkins@gerrit gerrit create-project -n nameProject
+|ssh -p 29418 jenkins@gerrit gerrit create-project -n ${nameProject}
 |git config credential.helper store
 |git config --global push.default simple
 |git remote add --mirror=push github ${gerritUrl}
