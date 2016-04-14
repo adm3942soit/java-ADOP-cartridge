@@ -70,6 +70,10 @@ if(linesNmbr!=0) {
                 }
             }
             triggers{
+                if (i == 0) {
+                    upstream "$baseName", 'SUCCESS'
+                }
+
                 gerrit{
                     events{
                         refUpdated()
@@ -120,7 +124,7 @@ if(linesNmbr!=0) {
             }
 
         }
-
+        queue(nameGerritJob)
         //endcopyRepoFromGitToGerrit()
 
         job("$jobName") {
@@ -139,9 +143,6 @@ if(linesNmbr!=0) {
             label("java8")
             triggers {
 
-                if (i == 0) {
-                    upstream "$baseName", 'SUCCESS'
-                }
 
                 cron('@hourly')
 
