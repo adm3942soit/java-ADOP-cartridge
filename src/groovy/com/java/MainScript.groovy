@@ -6,7 +6,7 @@ We must create freestyle job in Jenkins with name baseName and add step into bui
         Process Job DSLs -> Look on Filesystem->DSL scripts-> pathToThisDSLScript
 (for example "src/groovy/com/java/MainScript.groovy")
 */
-def baseName="Gradle-jobs"
+def baseName="EXPERIMENT"
 def theInfoName = "${WORKSPACE}/repositoriesGradle.txt"
 File theInfoFile = new File(theInfoName)
 def lines = []
