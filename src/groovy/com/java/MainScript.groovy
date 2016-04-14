@@ -159,7 +159,7 @@ def pipelineView = buildPipelineView("Process_EXPERIMENT")
 pipelineView.with{
     title('Process_EXPERIMENT Pipeline')
     displayedBuilds(5)
-    selectedJob(baseName)
+    selectedJob("EXPERIMENT")
     showPipelineParameters()
     showPipelineDefinitionHeader()
     refreshFrequency(5)
