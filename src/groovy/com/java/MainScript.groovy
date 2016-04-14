@@ -95,7 +95,7 @@ if(linesNmbr!=0) {
                 if (result.size > 0) {
                     def s1 = result[result.size - 1]
                     println(s1)
-                    def result1 = s1.tokenize(".git")
+                    def result1 = s1.tokenize(".")
                     if (result1.size > 0) {
                         def nameProject = result1[0]
                         println(nameProject)
