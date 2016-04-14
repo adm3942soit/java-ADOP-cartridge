@@ -104,7 +104,7 @@ if(linesNmbr!=0) {
             println(gerritUrl)
             steps{
                 shell('''set +x
-|git clone --bare  ${gitUrl}
+|git clone --bare  ${gitUrl} $nameProject
 |cd $WORKSPACE
 |ls
 |cd $WORKSPACE/$nameProject
