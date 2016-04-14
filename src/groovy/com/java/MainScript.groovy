@@ -157,9 +157,9 @@ if(linesNmbr!=0) {
 /* Views*/
 def pipelineView = buildPipelineView("Process_EXPERIMENT")
 pipelineView.with{
-    title('Process_Application Pipeline')
+    title('Process_EXPERIMENT Pipeline')
     displayedBuilds(5)
-    selectedJob("Gradle-jobs")
+    selectedJob(baseName)
     showPipelineParameters()
     showPipelineDefinitionHeader()
     refreshFrequency(5)
