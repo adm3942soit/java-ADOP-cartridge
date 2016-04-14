@@ -52,9 +52,6 @@ if(linesNmbr!=0) {
         def nameGerritJob="GerritRepo_"+nameProject
         def gitUrl=lines[i]
         def gerritUrl="ssh://jenkins@gerrit:29418/"+nameProject+".git"
-        environmentVariables {
-            env('gerritUrl',gerritUrl)
-        }
         job("$nameGerritJob") {
             wrappers {
                 preBuildCleanup()
@@ -71,6 +68,10 @@ if(linesNmbr!=0) {
                     branch("*/master")
                 }
             }
+            environmentVariables {
+                env('gerritUrl',gerritUrl)
+            }
+
             triggers{
                 if (i == 0) {
                     upstream "$baseName", 'SUCCESS'
