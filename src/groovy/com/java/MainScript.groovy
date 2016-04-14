@@ -117,7 +117,7 @@ if(linesNmbr!=0) {
 |git config --global push.default simple
 |git remote add --mirror=push github ${gerritUrl}
 |git remote -v
-|git review ${gerritUrl} HEAD:refs/for/master
+|git push ${gerritUrl} HEAD:refs/for/master
 |git clone ${gerritUrl} HEAD:refs/for/master
 |git branch -r
 |set -x'''.stripMargin())
